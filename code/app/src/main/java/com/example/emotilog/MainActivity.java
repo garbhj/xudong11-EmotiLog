@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.EmotionLogListener {
+public class MainActivity extends AppCompatActivity implements HomeFragment.EmotionLogListener, EmotionLogProvider {
     /*
 
      */
@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Emot
         setContentView(binding.getRoot());
 
         initButtons();
+        initExampleLog();
 
         // Boilerplate: for aesthetics
         EdgeToEdge.enable(this);
@@ -49,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Emot
         assert navHostFragment != null;  // Autofill
         NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavBar, navController);
+    }
+
+    private void initExampleLog() {
+        logs.add(new EmotionLog(buttons.get(0)));
+        logs.add(new EmotionLog(buttons.get(1)));
     }
 
     private void initButtons() {
@@ -67,9 +73,14 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Emot
     public void onEmotionClick(EmotionButton button) {
         logs.add(new EmotionLog(button));
         Toast.makeText(this, "Logged: " + button.getTitle(), Toast.LENGTH_SHORT).show();
+
     }
 
     public List<EmotionButton> getEmotionButtons() {
         return this.buttons;
+    }
+
+    public List<EmotionLog> getEmotionLogsAll() {
+        return logs;
     }
 }

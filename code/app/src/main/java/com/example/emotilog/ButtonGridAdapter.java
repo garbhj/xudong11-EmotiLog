@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-Inspired by:
+Informed by:
 https://stackoverflow.com/questions/40587168/simple-android-grid-example-using-recyclerview-with-gridlayoutmanager-like-the
 */
 public class ButtonGridAdapter extends RecyclerView.Adapter<ButtonGridAdapter.ViewHolder> {
@@ -24,6 +24,7 @@ public class ButtonGridAdapter extends RecyclerView.Adapter<ButtonGridAdapter.Vi
         void onItemClick(EmotionButton button);
     }
 
+    // NOTE: need to pass in a listener when init
     public ButtonGridAdapter(List<EmotionButton> buttons, OnItemClickListener listener) {
         this.buttons = buttons;
         this.listener = listener;
@@ -41,8 +42,6 @@ public class ButtonGridAdapter extends RecyclerView.Adapter<ButtonGridAdapter.Vi
         com.example.emotilog.databinding.GridEmojiButtonBinding binding =
                 com.example.emotilog.databinding.GridEmojiButtonBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_emoji_button, parent, false);  // Need
-//        return new ViewHolder(view);
     }
 
     // SETS the new text upon update via ViewHolder.bind
@@ -59,8 +58,9 @@ public class ButtonGridAdapter extends RecyclerView.Adapter<ButtonGridAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         /*
-
-         */
+        * ViewHolder: Used by the RecyclerView to cycle bindings when scrolling
+        * In reality the whole recyclerView probably isn't needed unless I implement adding buttons
+        * */
 
         private final com.example.emotilog.databinding.GridEmojiButtonBinding binding;
 
@@ -75,22 +75,5 @@ public class ButtonGridAdapter extends RecyclerView.Adapter<ButtonGridAdapter.Vi
 
             itemView.setOnClickListener(v -> listener.onItemClick(item));
         }
-
-//        TextView emoji, title;
-//
-//        ViewHolder(View view) {
-//            super(view);
-//            emoji = view.findViewById(R.id.button_emoji);
-//            title = view.findViewById(R.id.button_title);
-//        }
-//
-//        void bind(EmotionButton item, OnItemClickListener listener) {
-//            emoji.setText(item.getEmoji());
-//            title.setText(item.getTitle());
-//
-//            itemView.setOnClickListener(view -> listener.onItemClick(item));
-//        }
-
-
     }
 }

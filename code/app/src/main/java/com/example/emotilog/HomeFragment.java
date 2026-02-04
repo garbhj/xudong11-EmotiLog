@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +17,12 @@ import com.example.emotilog.databinding.FragmentHomeBinding;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-    // NOTE: See AddCityFragment
+    // NOTE: See AddCityFragment, lab 3
     private FragmentHomeBinding binding;
-    private EmotionLogListener listener;
+    private EmotionLogListener buttonListener;
+    private EmotionLogProvider logProvider;
+
+    private LogListAdapter logAdapter;
 
     public interface EmotionLogListener {
         // Methods needed for interaction between fragment and parent activity
@@ -26,13 +30,15 @@ public class HomeFragment extends Fragment {
         List<EmotionButton> getEmotionButtons();
     }
 
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof EmotionLogListener) {
-            listener = (EmotionLogListener) context;  // = parent
+        if (context instanceof EmotionLogListener && context instanceof EmotionLogProvider) {
+            buttonListener = (EmotionLogListener) context;  // = parent
+            logProvider = (EmotionLogProvider) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement EmotionLogListener");
+            throw new RuntimeException(context.toString() + " must implement EmotionLogListener and EmotionLogProvider");
         }
     }
 
@@ -46,15 +52,23 @@ public class HomeFragment extends Fragment {
 
         // emojiGrid is the recycler view
         binding.emojiGrid.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        List<EmotionButton> data = listener.getEmotionButtons();
+        List<EmotionButton> buttons = buttonListener.getEmotionButtons();
 
-        // Initialize adapter that forwards button clicks to main activity
+        // Initialize adapter that forwards button clicks to main activity,
+        // the View fragment_home holds any onClickListeners
         // NOTE: can refresh using adapter.notifyDataSetChanged()
-        ButtonGridAdapter adapter = new ButtonGridAdapter(data, button -> {
-            listener.onEmotionClick(button);
+        ButtonGridAdapter buttonAdapter = new ButtonGridAdapter(buttons, button -> {
+            buttonListener.onEmotionClick(button);
         });
+        binding.emojiGrid.setAdapter(buttonAdapter);
 
-        binding.emojiGrid.setAdapter(adapter);
+
+        binding.emotionsLog.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        List<EmotionLog> logs = logProvider.getEmotionLogsAll();
+        LogListAdapter logAdapter = new LogListAdapter(logs);
+
+        binding.emotionsLog.setAdapter(logAdapter);
 
     }
 

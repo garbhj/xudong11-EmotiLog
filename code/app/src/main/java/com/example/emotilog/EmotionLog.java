@@ -1,6 +1,8 @@
 package com.example.emotilog;
 
 import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 
 public class EmotionLog {
     private final String title;
@@ -21,7 +23,13 @@ public class EmotionLog {
         return emoji;
     }
 
-    public LocalDateTime getTimestamp() {
+    public LocalDateTime getDateTime() {
         return timestamp;
+    }
+
+//    https://stackoverflow.com/questions/22463062/how-can-i-parse-format-dates-with-localdatetime-java-8
+    public String getTimeStampString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
+        return timestamp.format(formatter); // "1986-04-08 12:30"
     }
 }
