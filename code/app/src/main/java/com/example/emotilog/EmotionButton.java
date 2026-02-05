@@ -1,8 +1,8 @@
 package com.example.emotilog;
 
 /**
- * Data model for button
- *
+ * Data object used to represent buttons in MainActivity
+ * Stores the title and emoji, and provides getter functions
  */
 public class EmotionButton {
     private String title;
@@ -17,15 +17,7 @@ public class EmotionButton {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getEmoji() {
         return emoji;
-    }
-
-    public void setEmoji(String emoji) {
-        this.emoji = emoji;
     }
 }

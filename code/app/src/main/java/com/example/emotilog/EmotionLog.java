@@ -1,9 +1,14 @@
 package com.example.emotilog;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 
+
+/**
+ * Data object used to represent logged emoticons in MainActivity
+ * Provides getter functions for parameters, including for formatted date.
+ * */
 public class EmotionLog {
     private final String title;
     private final String emoji;
@@ -23,13 +28,17 @@ public class EmotionLog {
         return emoji;
     }
 
-    public LocalDateTime getDateTime() {
-        return timestamp;
+    /**
+     * Returns formatted string of date in format e.g. Jan. 23, 04:56:00 PM
+     * https://stackoverflow.com/questions/22463062/how-can-i-parse-format-dates-with-localdatetime-java-8
+      */
+    public String getTimeStampString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM. dd, hh:mm:ss a");
+        return timestamp.format(formatter);
     }
 
-//    https://stackoverflow.com/questions/22463062/how-can-i-parse-format-dates-with-localdatetime-java-8
-    public String getTimeStampString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd HH:mm");
-        return timestamp.format(formatter); // "1986-04-08 12:30"
+    /** Returns LocalDateUsed for comparison to retrieve logs of one day in MainActivity */
+    public LocalDate getDate() {
+        return timestamp.toLocalDate();
     }
 }
